@@ -1,19 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 
 const app = express();
 dotenv.config();
 const port = process.env.PORT;
 const url = process.env.MONGODB_URL;
 
-// app.get("/", (req, res) => {
-//     res.send("<h1> Successfully Hosted </h1>");
-//     console.log("Successfully Hosted");
-// });
-
 mongoose.connect(url).then(db => {
-    console.log("Successfully connected to database!");
+    console.log("Connected to database!");
 }).catch(err => {
     console.log(err);
 });
@@ -26,38 +22,21 @@ const userSchema = new mongoose.Schema({
 
 const userModel = mongoose.model("notes", userSchema);
 
-const randomData = [
-    {
-        _id: 1,
-        title: "Delegation",
-        content:
-          "Q. How many programmers does it take to change a light bulb? A. None – It’s a hardware problem"
-      },
-      {
-        _id: 2,
-        title: "Loops",
-        content:
-          "How to keep a programmer in the shower forever. Show him the shampoo bottle instructions: Lather. Rinse. Repeat."
-      },
-      {
-        _id: 3,
-        title: "Arrays",
-        content:
-          "Q. Why did the programmer quit his job? A. Because he didn't get arrays."
-      },
-      {
-        _id: 4,
-        title: "Hardware vs. Software",
-        content:
-          "What's the difference between hardware and software? You can hit your hardware with a hammer, but you can only curse at your software."
-      }
-    ];
+const whitelist = [{origin: "http://localhost:3000"}]
 
-await userModel.insertMany(randomData);
+app.use(cors(whitelist));
+
+app.get("/", async (req, res) => {
+  console.log("Server triggered!");
+  const allNotes = await userModel.find();
+  res.send(allNotes);
+});
+
+//await userModel.insertMany(randomData);
 
 //await userModel.deleteMany();
 
-const data = await userModel.find();
+//const data = await userModel.find();
 //console.log(data);
 
 

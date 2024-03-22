@@ -1,9 +1,9 @@
 import React from "react";
-import AddCardIcon from '@material-ui/icons/AddCard';
+//import AddCardIcon from '@material-ui/icons/AddCard';
 
 function AddNote(props) {
     const [newNote, setNewNote] = React.useState({
-        key: props.id, title: "", content: ""
+        _id: props.id, title: "", content: ""
     });
 
     function newItem(event) {
@@ -12,7 +12,6 @@ function AddNote(props) {
         setNewNote((prevValue) => {
             return ({...prevValue, [currentName]: currentValue});
         });
-        console.log(newNote);
     }
 
     return(
@@ -21,7 +20,7 @@ function AddNote(props) {
                 <input type="text" onChange={newItem} value={newNote.content} name="content" placeholder="Content" />
                 <button onClick={() => {
                     props.forAddingNote(newNote);
-                }}><AddCardIcon /></button>
+                }}>Add</button>
             </div>
         
     );
