@@ -2,8 +2,9 @@ import React from "react";
 //import AddCardIcon from '@material-ui/icons/AddCard';
 
 function AddNote(props) {
+    const newNoteId = props.id + 1;
     const [newNote, setNewNote] = React.useState({
-        _id: props.id, title: "", content: ""
+        _id: newNoteId, title: "", content: ""
     });
 
     function newItem(event) {
@@ -15,13 +16,13 @@ function AddNote(props) {
     }
 
     return(
-            <div className="note">
+            <form className="note" onSubmit={(event) => {
+                    props.forAddingNote(newNote);
+                }}>
                 <input type="text" onChange={newItem} value={newNote.title} name="title" placeholder="Title" />
                 <input type="text" onChange={newItem} value={newNote.content} name="content" placeholder="Content" />
-                <button onClick={() => {
-                    props.forAddingNote(newNote);
-                }}>Add</button>
-            </div>
+                <button type="submit">Add</button>
+            </form>
         
     );
 }

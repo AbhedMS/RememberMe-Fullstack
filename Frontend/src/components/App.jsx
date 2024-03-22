@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
@@ -9,19 +9,25 @@ async function getAllNotes() {
     console.log("call triggered!");
     try {
         const dbNotes = await axios.get("http://localhost:8000/");
-        console.log(dbNotes.data);
         return dbNotes.data;
     } catch (error) {
         console.log("Failed to connect to backend!");
     }
 }
 
-const notes = await getAllNotes();
+// async function postNewNote(noteToAdd) {
+//     try {
+//         console.log(noteToAdd);
+//         const newData = await axios.post("http://localhost:8000/", noteToAdd);
+//         return newData.data;
+//     } catch (error) {
+//         console.log("Unable to add new note!");
+//     }
+// }
+
+var allNotes = await getAllNotes();
 
 function App(){
-    
-    const [allNotes, updateNotes] = React.useState(notes);
-    console.log(allNotes);
 
     function noteCard(note) {
         return(
@@ -35,11 +41,13 @@ function App(){
         );
     }
 
-    function addNew(newNote) {
-        console.log("Added");
-        console.log(newNote);
-        updateNotes([...allNotes, newNote]);
-        console.log(allNotes);
+    async function addNew(newNote) {
+        try {
+            const newData = await axios.post("http://localhost:8000/", newNote);
+            allNotes = newData.data;
+        } catch (error) {
+            console.log("Unable to add new note!");
+        }
     }
 
     function deleteNote(id) {
@@ -55,7 +63,7 @@ function App(){
     return(
         <div>
             <Header></Header>
-            <AddNote id={(allNotes.length + 1)}  forAddingNote= {addNew} />
+            <AddNote id={allNotes.length}  forAddingNote= {addNew} />
             {allNotes.map(noteCard)}
             <Footer></Footer>
         </div>

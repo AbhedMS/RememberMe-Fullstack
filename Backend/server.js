@@ -1,9 +1,12 @@
 import express from "express";
+import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config();
 const port = process.env.PORT;
 const url = process.env.MONGODB_URL;
@@ -32,7 +35,13 @@ app.get("/", async (req, res) => {
   res.send(allNotes);
 });
 
-//await userModel.insertMany(randomData);
+app.post("/", async (req, res) => {
+    console.log("post triggered");
+    const newNote = req.body;
+    console.log(newNote);
+    await userModel.insertMany(newNote);
+    res.redirect("/");
+});
 
 //await userModel.deleteMany();
 
