@@ -7,9 +7,9 @@ function Note(props) {
         <div className="note">
             <h1>{props.title}</h1>
             <p>{props.content}</p>
-            <button onClick={() => {
-                props.toDelete(props.id)
-            }}>Delete</button>
+            <form onSubmit={() => { props.toDelete(props.id)}}>
+                <button type="submit">Delete</button>
+            </form>
         </div>
     );
 }

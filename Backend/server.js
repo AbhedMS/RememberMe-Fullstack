@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 const app = express();
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 dotenv.config();
 const port = process.env.PORT;
 const url = process.env.MONGODB_URL;
@@ -30,24 +30,20 @@ const whitelist = [{origin: "http://localhost:3000"}]
 app.use(cors(whitelist));
 
 app.get("/", async (req, res) => {
-  console.log("Server triggered!");
   const allNotes = await userModel.find();
   res.send(allNotes);
 });
 
 app.post("/", async (req, res) => {
-    console.log("post triggered");
     const newNote = req.body;
-    console.log(newNote);
     await userModel.insertMany(newNote);
     res.redirect("/");
 });
 
-//await userModel.deleteMany();
-
-//const data = await userModel.find();
-//console.log(data);
-
+app.delete("/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    await userModel.deleteOne({_id: id});
+})
 
 
 app.listen(port, () => {

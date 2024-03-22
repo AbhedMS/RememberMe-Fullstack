@@ -2,9 +2,8 @@ import React from "react";
 //import AddCardIcon from '@material-ui/icons/AddCard';
 
 function AddNote(props) {
-    const newNoteId = props.id + 1;
     const [newNote, setNewNote] = React.useState({
-        _id: newNoteId, title: "", content: ""
+        _id: props.id, title: "", content: ""
     });
 
     function newItem(event) {
